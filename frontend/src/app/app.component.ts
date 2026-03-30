@@ -1,8 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import {
   trigger,
-  state,
   style,
   transition,
   animate,
@@ -25,15 +25,16 @@ import {
 import { UnifiedHomeComponent } from './components/unified-home/unified-home.component';
 import { AiDiscoveryComponent } from './components/ai-discovery/ai-discovery.component';
 import { CinemaJourneyComponent } from './components/cinema-journey/cinema-journey.component';
-import { SocialOverlayComponent } from './components/social-overlay/social-overlay.component';
 import { AdminContentComponent } from './components/admin-content/admin-content.component';
 import { AdminCinemaComponent } from './components/admin-cinema/admin-cinema.component';
 import { AdminNotificationsComponent } from './components/admin-notifications/admin-notifications.component';
 import { AdminUsersComponent } from './components/admin-users/admin-users.component';
+import { FeedbackComponent } from './components/feedback/feedback.component';
+import { WatchPartyComponent } from './components/watchparty/watchparty.component';
 
 type AppMode = 'user' | 'admin';
-type UserTab = 'home' | 'discover' | 'cinema' | 'social';
-type AdminTab = 'content' | 'cinema' | 'notifications' | 'users';
+type UserTab = 'home' | 'discover' | 'cinema' | 'feedback' | 'watchparty';
+type AdminTab = 'content' | 'cinema' | 'notifications' | 'users' | 'feedback' | 'watchparty';
 
 interface TabItem {
   id: string;
@@ -50,11 +51,12 @@ interface TabItem {
     UnifiedHomeComponent,
     AiDiscoveryComponent,
     CinemaJourneyComponent,
-    SocialOverlayComponent,
     AdminContentComponent,
     AdminCinemaComponent,
     AdminNotificationsComponent,
     AdminUsersComponent,
+    FeedbackComponent,
+    WatchPartyComponent,
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
@@ -71,7 +73,6 @@ interface TabItem {
   ],
 })
 export class AppComponent {
-  // Icons
   readonly HomeIcon = Home;
   readonly SparklesIcon = Sparkles;
   readonly TicketIcon = Ticket;
@@ -84,7 +85,6 @@ export class AppComponent {
   readonly MenuIcon = Menu;
   readonly XIcon = X;
 
-  // State using signals
   appMode = signal<AppMode>('user');
   userTab = signal<UserTab>('home');
   adminTab = signal<AdminTab>('content');
@@ -95,7 +95,8 @@ export class AppComponent {
     { id: 'home', label: 'Home', icon: Home },
     { id: 'discover', label: 'AI Discovery', icon: Sparkles },
     { id: 'cinema', label: 'Cinema', icon: Ticket },
-    { id: 'social', label: 'Watch Parties', icon: Users },
+    { id: 'feedback', label: 'Feedback', icon: Bell },
+    { id: 'watchparty', label: 'Watch Party', icon: Users },
   ];
 
   readonly adminTabs: TabItem[] = [
@@ -103,6 +104,8 @@ export class AppComponent {
     { id: 'cinema', label: 'Cinema Partners', icon: MapPin },
     { id: 'notifications', label: 'Notifications', icon: Bell },
     { id: 'users', label: 'Users & Loyalty', icon: UserCog },
+    { id: 'feedback', label: 'Liste Feedbacks', icon: Bell },
+    { id: 'watchparty', label: 'Liste WatchParties', icon: Users },
   ];
 
   toggleMode() {
@@ -111,14 +114,12 @@ export class AppComponent {
   }
 
   setUserTab(tab: string) {
-    const userTab = tab as UserTab;
-    this.userTab.set(userTab);
+    this.userTab.set(tab as UserTab);
     this.mobileMenuOpen.set(false);
   }
 
   setAdminTab(tab: string) {
-    const adminTab = tab as AdminTab;
-    this.adminTab.set(adminTab);
+    this.adminTab.set(tab as AdminTab);
   }
 
   toggleMobileMenu() {
